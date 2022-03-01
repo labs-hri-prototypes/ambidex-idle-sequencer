@@ -272,8 +272,8 @@ class Btn extends React.Component {
 class App extends React.Component {
   constructor(props) {
     super(props);
-    let prevMotion = '1-a';
-    let currentMotion = '1-b';
+    let prevMotion = 'none';
+    let currentMotion = 'none';
     this.state = {
       sideCamVisible: false,
       playStatus: 'none',
@@ -281,6 +281,7 @@ class App extends React.Component {
       currentMotion: currentMotion,
       dice: 0,
       prIn: data_pr,
+      prOutType: 1,
       prOut: this.calcPrOut(data_pr, 1, prevMotion, currentMotion),
       prOut1: this.calcPrOut(data_pr, 1, prevMotion, currentMotion),
       prOut2: this.calcPrOut(data_pr, 2, prevMotion, currentMotion)
@@ -291,7 +292,11 @@ class App extends React.Component {
     let current = this.state.currentMotion;
     let prev = this.state.prevMotion;
     let fix = '1-a';
-    let prOut = (prev === fix) ? this.state.prOut2 : this.state.prOut1; //done by here
+    let prOutType = this.state.prOutType;
+    prOutType = (prOutType === 1) ?
+      ((current === fix) ? 2 : 1) : 1;
+    let prOut = (prOutType === 2) ? this.state.prOut2 : this.state.prOut1;
+
     let temp = this.findCurrent(dice, prOut);
     console.log(dice);
     console.log(temp);
@@ -308,15 +313,21 @@ class App extends React.Component {
       item.isPrev = false;
       item.isCurrent = false;
     });
-    prOut.find(o => o.code === prev).isPrev = true;
+    const codes = prOut.map(item => {
+      return item.code;
+    });
+    if(codes.includes(prev)) {
+      prOut.find(o => o.code === prev).isPrev = true;
+    }
     prOut.find(o => o.code === current).isCurrent = true;
     this.setState({
       dice: dice,
       prevMotion: prev,
       currentMotion: current,
+      prOutType: prOutType,
       prOut: prOut
     });
-
+    return current;
   }
   findCurrent(dice, prOut) {
     for (let i = 0; i < prOut.length; i++) {
@@ -370,7 +381,9 @@ class App extends React.Component {
       this.state.prevMotion,
       this.state.currentMotion
     );
+    const prOut = (this.state.prOutType == 2) ? _pr2 : _pr1;
     this.setState({
+      prOut: prOut,
       prOut1: _pr1,
       prOut2: _pr2
     });
