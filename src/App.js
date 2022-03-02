@@ -3,13 +3,6 @@ import './App.css';
 import {data_pr} from './data.js';
 
 
-/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
-/*   Variables & Constants                                                     */
-/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
-var showCam = false;
-
-
-
 
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 /*   React classes                                                             */
@@ -64,9 +57,7 @@ class Dashboard extends React.Component {
   constructor(props) {
     super(props);
   }
-  makeStatusTable() {
 
-  }
   makeRangeTable(prOut) {
     let rows = [];
     prOut.forEach((item, index) => {
@@ -89,6 +80,7 @@ class Dashboard extends React.Component {
     });
     return rows;
   }
+
   render() {
     let rows = this.makeRangeTable(this.props.prOut);
     return (
@@ -112,15 +104,15 @@ class Dashboard extends React.Component {
   }
 }
 
+// Controlboard related classes ------------------------------------------------
+
 class Controlboard extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {
-      min: 0,
-      max: 100
-    }
   }
-  makeBarTable(prIn) {
+
+  makeBarTable() {
+    const prIn = this.props.data;
     let rows = [];
     const data_array = Object.keys(prIn);
     data_array.forEach((set, setIndex) => {
@@ -128,17 +120,19 @@ class Controlboard extends React.Component {
         let contents = [];
         let value_old = 0;
         prIn[set].prRatios.forEach((item, index) => {
-          let _content = <input
-            type="range"
-            id={set+'_'+item.cat}
-            key={set+'_'+item.cat}
-            className={'controls'}
-            min={this.state.min}
-            max={this.state.max}
-            label={item.cat}
-            defaultValue={(item.pr + value_old)*100}
-          />;
           if (index < prIn[set].prRatios.length - 1) {
+            const value_next =
+              value_old +
+              item.pr +
+              prIn[set].prRatios[index + 1].pr;
+            const value = parseInt((item.pr + value_old)*100);
+            const _content = <Slider
+              id={set+'_'+item.cat}
+              key={set+'_'+item.cat}
+              cat={item.cat}
+              value={value}
+              onChange={this.props.onSliderChange}
+            />;
             contents.push(_content);
             value_old += item.pr;
           }
@@ -154,18 +148,19 @@ class Controlboard extends React.Component {
           let contents = [];
           let value_old = 0;
           inSet.prRatios.forEach((item, index) => {
-            let _content = <input
-              type="range"
-              id={item.code}
-              key={item.code}
-              className={'controls'}
-              min={this.state.min}
-              max={this.state.max}
-              label={item.code}
-              defaultValue={(item.pr + value_old)*100}
-              onChange={() => blabla()}
-            />;
             if (index < inSet.prRatios.length - 1) {
+              const value_next =
+                value_old +
+                item.pr +
+                prIn[set].prRatios[index + 1].pr;
+              const value = parseInt((item.pr + value_old)*100);
+              const _content = <Slider
+                id={item.code}
+                key={item.code}
+                cat={inSet.cat}
+                value={value}
+                onChange={this.props.onSliderChange}
+              />;
               contents.push(_content);
               value_old += item.pr;
             }
@@ -182,12 +177,12 @@ class Controlboard extends React.Component {
     });
     return rows;
   }
+
   render() {
-    const content = this.makeBarTable(this.props.data);
+    let content = this.makeBarTable();
     return (
       <div className="ui-container-v abs-right">
-        <input type="checkbox" id="toggle_panel" value="false"/>
-        <label htmlFor="toggle_panel" className="toggle-panel">probability ratio</label>
+        <div className="header-mini">probability ratio</div>
         <div className="ui-panel round-bottom">
         <table className="controlpanel">
           <tbody>
@@ -263,7 +258,43 @@ class Btn extends React.Component {
   }
 }
 
-
+class Slider extends React.Component {
+  constructor(props) {
+    super(props);
+    this.handleChange = this.handleChange.bind(this);
+    this.handleMouseUp = this.handleMouseUp.bind(this);
+  }
+  handleChange(e) {
+    const value = e.target.value;
+    return this.props.onChange(this.props.id, value);
+  }
+  handleMouseUp(e) {
+    console.log("input value changed:");
+    console.log(`  id: ${this.props.id}, value: ${this.props.value}`);
+  }
+  render() {
+    return (
+      <div className="wrapper-slider">
+        <input
+          type="range"
+          id={this.props.id}
+          cat={this.props.cat}
+          className='controls'
+          min={0}
+          max={100}
+          value={this.props.value}
+          onChange={this.handleChange}
+          onMouseUp={this.handleMouseUp}
+        />
+        <div
+          className="slider-indicator"
+          style={{left: `calc(6px + (100% - 12px)*${this.props.value}/100)`}}
+        >
+          {this.props.value}</div>
+      </div>
+    );
+  }
+}
 
 /*******************************************************************************/
 /*   Assemble!!!   *************************************************************/
@@ -280,13 +311,80 @@ class App extends React.Component {
       prevMotion: prevMotion,
       currentMotion: currentMotion,
       dice: 0,
+      trial: 0,
       prIn: data_pr,
       prOutType: 1,
       prOut: this.calcPrOut(data_pr, 1, prevMotion, currentMotion),
       prOut1: this.calcPrOut(data_pr, 1, prevMotion, currentMotion),
       prOut2: this.calcPrOut(data_pr, 2, prevMotion, currentMotion)
     };
+    this.handleClick = this.handleClick.bind(this);
+    this.handleSlider = this.handleSlider.bind(this);
   }
+
+  handleClick(id) {
+    ///*// DEBUG BTN
+    console.log(`button pressed: ${id}`);
+    //*/// DEBUG BTN
+    switch(id) {
+      case 'btn_start':
+        this.findMotion();
+        break;
+      case 'btn_end':
+        break;
+      case 'btn_cam':
+        const toggleCam = !this.state.sideCamVisible;
+        this.setState({sideCamVisible: toggleCam});
+        ///*// DEBUG TOGGLECAM
+        console.log(`  sideCamVisible: ${toggleCam}`);
+        //*/// DEBUG TOGGLECAM
+        break;
+      default:
+        break;
+    }
+  }
+
+  handleSlider(id, value) {
+    let data = this.state.prIn;
+    // for category ratio
+    if(!id.match(/^\d/)) {
+      const set = id.match(/^\D*(?=_)/)[0];
+      const cat = parseInt(id.match(/\d*$/)[0]);
+      let _value = parseFloat(value)/100;
+      for(let i = 0; i <= cat; i++) {
+        if(i > 0) {
+          _value -= data[set].prRatios.find(o => o.cat === i-1).pr;
+        }
+      }
+      const _value_diff = _value -
+        parseFloat(data[set].prRatios.find(o => o.cat === cat).pr);
+      data[set].prRatios.find(o => o.cat === cat).pr = _value;
+      data[set].prRatios.find(o => o.cat === cat+1).pr -= _value_diff;
+    }
+    // for motion ratio in category
+    else {
+      const cat = parseInt(id.match(/^\d*(?=-)/)[0]);
+      let data_cat = data.motionGroup.prRatios.find(o => o.cat === cat).prRatios;
+      let _value = parseFloat(value)/100;
+      for(let i = 0; i < data_cat.length - 1; i++) {
+        if(i > 0) {
+          _value -= data_cat[i-1].pr;
+        }
+      }
+      for(let index = 0; index < data_cat.length;index++) {
+        if(data_cat[index].code === id) {
+          const _value_diff = _value - data_cat[index].pr;
+          data_cat[index].pr = _value;
+          data_cat[index+1].pr -= _value_diff;
+          data.motionGroup.prRatios.find(o => o.cat === cat).prRatios = data_cat;
+          break;
+        }
+      }
+    }
+    this.setState({prIn: data});
+    this.setPrOut();
+  }
+
   findMotion() {
     let dice = Math.random();
     let current = this.state.currentMotion;
@@ -296,17 +394,30 @@ class App extends React.Component {
     prOutType = (prOutType === 1) ?
       ((current === fix) ? 2 : 1) : 1;
     let prOut = (prOutType === 2) ? this.state.prOut2 : this.state.prOut1;
-
     let temp = this.findCurrent(dice, prOut);
-    console.log(dice);
-    console.log(temp);
+
+    ///*// DEBUG DICE
+    console.log("======== iteration start ========");
+    const trial = this.state.trial + 1;
+    let debugbar = "";
+    for (let i = 0; i < 20 - trial.toString().length; i++) {
+      debugbar += "-";
+    }
+    console.log(`dice trial: ${trial} ${debugbar}`);
+    console.log(`  dice thrown: ${dice.toFixed(3)}`);
+    console.log(`  prev motion: ${current}`);
+    console.log(`  new motion: ${temp}`);
     while(temp === current && temp != fix) {
-      console.log('repeat');
       dice = Math.random();
       temp = this.findCurrent(dice, prOut);
-      console.log(dice);
-      console.log(temp);
+      // DEBUG DICE REPEAT
+      console.log('  (repeat trial)');
+      console.log(`  dice thrown: ${dice.toFixed(3)}`);
+      console.log(`  new motion: ${temp}`);
     }
+    console.log("(dice trial ends) ---------------");
+    //*/// DEBUG DICE
+
     prev = current;
     current = temp;
     prOut.forEach(item => {
@@ -322,13 +433,20 @@ class App extends React.Component {
     prOut.find(o => o.code === current).isCurrent = true;
     this.setState({
       dice: dice,
+      trial: trial,
       prevMotion: prev,
       currentMotion: current,
       prOutType: prOutType,
       prOut: prOut
     });
+
+    ///*// DEBUG PROUT
+    console.log("prOut: " + JSON.stringify(this.state.prOut, null, 2));
+    //*/// DEBUG PROUT
+
     return current;
   }
+
   findCurrent(dice, prOut) {
     for (let i = 0; i < prOut.length; i++) {
       if(dice < prOut[i].pr) {
@@ -365,9 +483,9 @@ class App extends React.Component {
         _range.push(output);
       });
     });
-    console.log(_range);
     return _range;
   }
+
   setPrOut() {
     const _pr1 = this.calcPrOut(
       this.state.prIn,
@@ -388,19 +506,10 @@ class App extends React.Component {
       prOut2: _pr2
     });
   }
-  setPrIn() {
-    this.setPrOut();
-  }
-  handleClick(id) {
-    switch(id) {
-      case 'btn_start':
-        this.findMotion();
-        break;
-      default:
-        break;
-    }
-  }
 
+  showSideCam() {
+    return (this.state.sideCamVisible) ? "visible" : "hidden";
+  }
   render() {
     return (
       <div className="App">
@@ -412,14 +521,17 @@ class App extends React.Component {
         <Placeholder
         id="box_cam_side"
           content={<Img src={require('./img/side_default.jpg')}/>}
-          visibility={showCam}
+          visibility={this.state.sideCamVisible}
         />
         <Dashboard
           prOut={this.state.prOut}
           prevMotion={this.state.prevMotion}
           dice={this.state.dice}
         />
-        <Controlboard data={this.state.prIn}/>
+        <Controlboard
+          data={this.state.prIn}
+          onSliderChange={this.handleSlider}
+          />
         <Footer
           onClick={id => this.handleClick(id)}
         />
@@ -443,14 +555,14 @@ function stopMotion() {
   console.log("stop motion");
 }
 
-function changeCam() {
-  console.log("change camera");
-}
-
 function videoEndHandler() {
 
 }
 
 function blabla() {
   console.log('bla bla');
+}
+
+function clamp(value, min, max) {
+  return (Math.min(Math.max(value, min), max));
 }

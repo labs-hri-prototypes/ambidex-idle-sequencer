@@ -194,6 +194,22 @@ button:active {
 div.round-bottom {
   border-radius: 8px 0 8px 8px;
 }
+div.header-mini {
+  position: relative;
+  margin-right: 0;
+  margin-left: auto;
+  width: 160px;
+  height: 48px;
+  background-color: var(--c-magnetite);
+  font-family: 'NanumSquare', sans-serif;
+  font-weight: bold;
+  font-size: 16px;
+  text-align: center;
+  line-height: 48px;
+  border-radius: 8px 8px 0 0;
+  color: var(--c-white);
+  user-select: none;
+}
 .abs-left {
   left: 0;
 }
@@ -272,4 +288,15 @@ input[type=range].controls::-webkit-slider-thumb {
   /*box-shadow: calc(-100vw -6px) 0 0 100vw var(--c-green-1);*/
   cursor: pointer;
   pointer-events: all;
+}
+div.wrapper-slider {
+  position: relative;
+  pointer-events: none;
+}
+div.slider-indicator {
+  position: absolute;
+  top: 6px;
+  font-size: 8px;
+  transform: translateX(-50%);
+  pointer-events: none;
 }
