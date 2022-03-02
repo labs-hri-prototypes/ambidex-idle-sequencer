@@ -1,19 +1,19 @@
 {
   "files": {
-    "main.css": "/ambidex-idle-sequencer/public/index.html/static/css/main.8adc6569.css",
-    "main.js": "/ambidex-idle-sequencer/public/index.html/static/js/main.4e6cac72.js",
-    "static/js/787.a5d67cde.chunk.js": "/ambidex-idle-sequencer/public/index.html/static/js/787.a5d67cde.chunk.js",
-    "static/media/NanumGothicCoding.ttf": "/ambidex-idle-sequencer/public/index.html/static/media/NanumGothicCoding.6297642adf222a0c515e.ttf",
-    "static/media/NanumSquare_acB.ttf": "/ambidex-idle-sequencer/public/index.html/static/media/NanumSquare_acB.ac4e2f27234150ae0de3.ttf",
-    "static/media/side_default.jpg": "/ambidex-idle-sequencer/public/index.html/static/media/side_default.fb6b19f0230a6a7c6d59.jpg",
-    "static/media/front_default.jpg": "/ambidex-idle-sequencer/public/index.html/static/media/front_default.7cea175fd893b6ceb624.jpg",
-    "index.html": "/ambidex-idle-sequencer/public/index.html/index.html",
-    "main.8adc6569.css.map": "/ambidex-idle-sequencer/public/index.html/static/css/main.8adc6569.css.map",
-    "main.4e6cac72.js.map": "/ambidex-idle-sequencer/public/index.html/static/js/main.4e6cac72.js.map",
-    "787.a5d67cde.chunk.js.map": "/ambidex-idle-sequencer/public/index.html/static/js/787.a5d67cde.chunk.js.map"
+    "main.css": "/ambidex-idle-sequencer/public/static/css/main.bcc7409c.css",
+    "main.js": "/ambidex-idle-sequencer/public/static/js/main.74dca15d.js",
+    "static/js/787.a5d67cde.chunk.js": "/ambidex-idle-sequencer/public/static/js/787.a5d67cde.chunk.js",
+    "static/media/NanumGothicCoding.ttf": "/ambidex-idle-sequencer/public/static/media/NanumGothicCoding.6297642adf222a0c515e.ttf",
+    "static/media/NanumSquare_acB.ttf": "/ambidex-idle-sequencer/public/static/media/NanumSquare_acB.ac4e2f27234150ae0de3.ttf",
+    "static/media/side_default.jpg": "/ambidex-idle-sequencer/public/static/media/side_default.fb6b19f0230a6a7c6d59.jpg",
+    "static/media/front_default.jpg": "/ambidex-idle-sequencer/public/static/media/front_default.7cea175fd893b6ceb624.jpg",
+    "index.html": "/ambidex-idle-sequencer/public/index.html",
+    "main.bcc7409c.css.map": "/ambidex-idle-sequencer/public/static/css/main.bcc7409c.css.map",
+    "main.74dca15d.js.map": "/ambidex-idle-sequencer/public/static/js/main.74dca15d.js.map",
+    "787.a5d67cde.chunk.js.map": "/ambidex-idle-sequencer/public/static/js/787.a5d67cde.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.8adc6569.css",
-    "static/js/main.4e6cac72.js"
+    "static/css/main.bcc7409c.css",
+    "static/js/main.74dca15d.js"
   ]
 }
