@@ -1,19 +1,35 @@
 {
   "files": {
-    "main.css": "/ambidex-idle-sequencer/public/static/css/main.bcc7409c.css",
-    "main.js": "/ambidex-idle-sequencer/public/static/js/main.74dca15d.js",
-    "static/js/787.a5d67cde.chunk.js": "/ambidex-idle-sequencer/public/static/js/787.a5d67cde.chunk.js",
-    "static/media/NanumGothicCoding.ttf": "/ambidex-idle-sequencer/public/static/media/NanumGothicCoding.6297642adf222a0c515e.ttf",
-    "static/media/NanumSquare_acB.ttf": "/ambidex-idle-sequencer/public/static/media/NanumSquare_acB.ac4e2f27234150ae0de3.ttf",
-    "static/media/side_default.jpg": "/ambidex-idle-sequencer/public/static/media/side_default.fb6b19f0230a6a7c6d59.jpg",
-    "static/media/front_default.jpg": "/ambidex-idle-sequencer/public/static/media/front_default.7cea175fd893b6ceb624.jpg",
-    "index.html": "/ambidex-idle-sequencer/public/index.html",
-    "main.bcc7409c.css.map": "/ambidex-idle-sequencer/public/static/css/main.bcc7409c.css.map",
-    "main.74dca15d.js.map": "/ambidex-idle-sequencer/public/static/js/main.74dca15d.js.map",
-    "787.a5d67cde.chunk.js.map": "/ambidex-idle-sequencer/public/static/js/787.a5d67cde.chunk.js.map"
+    "main.css": "/ambidex-idle-sequencer/static/css/main.324639d1.css",
+    "main.js": "/ambidex-idle-sequencer/static/js/main.34fae9c1.js",
+    "static/js/787.a5d67cde.chunk.js": "/ambidex-idle-sequencer/static/js/787.a5d67cde.chunk.js",
+    "static/media/NanumGothicCoding.ttf": "/ambidex-idle-sequencer/static/media/NanumGothicCoding.6297642adf222a0c515e.ttf",
+    "static/media/side_2-3-b.mp4": "/ambidex-idle-sequencer/static/media/side_2-3-b.a2901ad805385db65c94.mp4",
+    "static/media/side_1-c.mp4": "/ambidex-idle-sequencer/static/media/side_1-c.5a7d5179d16cb61beb0d.mp4",
+    "static/media/side_3-1-b.mp4": "/ambidex-idle-sequencer/static/media/side_3-1-b.ba503d3d53f52319ded1.mp4",
+    "static/media/side_2-3-a.mp4": "/ambidex-idle-sequencer/static/media/side_2-3-a.be1ed0aae39ba3e2e0db.mp4",
+    "static/media/side_3-1-a.mp4": "/ambidex-idle-sequencer/static/media/side_3-1-a.bb1aff8f7557934579cc.mp4",
+    "static/media/side_3-1-c.mp4": "/ambidex-idle-sequencer/static/media/side_3-1-c.5315ebf55779008df60e.mp4",
+    "static/media/front_2-3-b.mp4": "/ambidex-idle-sequencer/static/media/front_2-3-b.1dbf4392b798863a37ac.mp4",
+    "static/media/front_3-1-b.mp4": "/ambidex-idle-sequencer/static/media/front_3-1-b.9cf6ebd6f5e27c302145.mp4",
+    "static/media/front_1-c.mp4": "/ambidex-idle-sequencer/static/media/front_1-c.3d41a42fbdd5113eb683.mp4",
+    "static/media/front_2-3-a.mp4": "/ambidex-idle-sequencer/static/media/front_2-3-a.2c7f07011d0d9b77c00c.mp4",
+    "static/media/front_3-1-c.mp4": "/ambidex-idle-sequencer/static/media/front_3-1-c.1690128ec0e23b42946f.mp4",
+    "static/media/front_3-1-a.mp4": "/ambidex-idle-sequencer/static/media/front_3-1-a.c1f978766e20a392c85c.mp4",
+    "static/media/side_1-b.mp4": "/ambidex-idle-sequencer/static/media/side_1-b.edc7f3087a8514a13d23.mp4",
+    "static/media/side_1-a.mp4": "/ambidex-idle-sequencer/static/media/side_1-a.eaafc2a4d850b8bbfca7.mp4",
+    "static/media/front_1-b.mp4": "/ambidex-idle-sequencer/static/media/front_1-b.7448f45f085ccb62181a.mp4",
+    "static/media/NanumSquare_acB.ttf": "/ambidex-idle-sequencer/static/media/NanumSquare_acB.ac4e2f27234150ae0de3.ttf",
+    "static/media/front_1-a.mp4": "/ambidex-idle-sequencer/static/media/front_1-a.19b5112d1f36ecc0a932.mp4",
+    "static/media/side_default.jpg": "/ambidex-idle-sequencer/static/media/side_default.fb6b19f0230a6a7c6d59.jpg",
+    "static/media/front_default.jpg": "/ambidex-idle-sequencer/static/media/front_default.7cea175fd893b6ceb624.jpg",
+    "index.html": "/ambidex-idle-sequencer/index.html",
+    "main.324639d1.css.map": "/ambidex-idle-sequencer/static/css/main.324639d1.css.map",
+    "main.34fae9c1.js.map": "/ambidex-idle-sequencer/static/js/main.34fae9c1.js.map",
+    "787.a5d67cde.chunk.js.map": "/ambidex-idle-sequencer/static/js/787.a5d67cde.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.bcc7409c.css",
-    "static/js/main.74dca15d.js"
+    "static/css/main.324639d1.css",
+    "static/js/main.34fae9c1.js"
   ]
 }
