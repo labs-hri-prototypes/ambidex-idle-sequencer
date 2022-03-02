@@ -16,7 +16,7 @@ class Placeholder extends React.Component {
       <div
         id={this.props.id}
         className="placeholder"
-        style={{visibility: this.props.visibility ? "visible" : "hidden"}}
+        style={{display: this.props.visibility ? "block" : "none"}}
       >
         {this.props.content}
       </div>
@@ -25,17 +25,23 @@ class Placeholder extends React.Component {
 }
 
 class Video extends React.Component {
-  changeSource() {
 
-  }
   render() {
     return (
       <video
         id={this.props.id}
-        className=""
-        onEnded={() => videoEndHandler()}
-        src={this.props.src}
-      />
+        //ref={this.props.videoref}
+        style={{visibility: this.props.visibility ? "visible" : "hidden"}}
+        onTimeUpdate={this.props.onTimeUpdate}
+        onEnded={this.props.onEnded}
+        preload="auto"
+      >
+        <source
+          src={this.props.src}
+          type="video/mp4"
+        />
+        Error to load video
+      </video>
     );
   }
 }
@@ -46,6 +52,7 @@ class Img extends React.Component {
       <img
         id={this.props.id}
         src={this.props.src}
+        alt={this.props.id}
       />
     );
   }
@@ -54,9 +61,6 @@ class Img extends React.Component {
 // Dashboard related classes ---------------------------------------------------
 
 class Dashboard extends React.Component {
-  constructor(props) {
-    super(props);
-  }
 
   makeRangeTable(prOut) {
     let rows = [];
@@ -107,9 +111,6 @@ class Dashboard extends React.Component {
 // Controlboard related classes ------------------------------------------------
 
 class Controlboard extends React.Component {
-  constructor(props) {
-    super(props);
-  }
 
   makeBarTable() {
     const prIn = this.props.data;
@@ -121,14 +122,10 @@ class Controlboard extends React.Component {
         let value_old = 0;
         prIn[set].prRatios.forEach((item, index) => {
           if (index < prIn[set].prRatios.length - 1) {
-            const value_next =
-              value_old +
-              item.pr +
-              prIn[set].prRatios[index + 1].pr;
             const value = parseInt((item.pr + value_old)*100);
             const _content = <Slider
-              id={set+'_'+item.cat}
-              key={set+'_'+item.cat}
+              id={`slider_${set}_${item.cat}`}
+              key={`slider_${set}_${item.cat}`}
               cat={item.cat}
               value={value}
               onChange={this.props.onSliderChange}
@@ -137,7 +134,7 @@ class Controlboard extends React.Component {
             value_old += item.pr;
           }
         });
-        let row = <tr key={set}>
+        let row = <tr key={`slidergroup_${set}`}>
           <td className="header">{set}</td>
           <td className="cell-slider">{contents}</td>
         </tr>;
@@ -149,14 +146,10 @@ class Controlboard extends React.Component {
           let value_old = 0;
           inSet.prRatios.forEach((item, index) => {
             if (index < inSet.prRatios.length - 1) {
-              const value_next =
-                value_old +
-                item.pr +
-                prIn[set].prRatios[index + 1].pr;
               const value = parseInt((item.pr + value_old)*100);
               const _content = <Slider
-                id={item.code}
-                key={item.code}
+                id={`slider_${item.code}`}
+                key={`slider_${item.code}`}
                 cat={inSet.cat}
                 value={value}
                 onChange={this.props.onSliderChange}
@@ -166,7 +159,7 @@ class Controlboard extends React.Component {
             }
           });
           let row = <tr key={inSet.cat}>
-            <td className="header">{inSet.cat + ' (' + inSet.desc + ')'}</td>
+            <td className="header">{`${inSet.cat} (${inSet.desc})`}</td>
             <td className="cell-slider">{contents}</td>
           </tr>;
           if(inSet.prRatios.length > 1) {
@@ -199,9 +192,6 @@ class Controlboard extends React.Component {
 
 class Footer extends React.Component {
   render() {
-    const btn_start = 'btn_start';
-    const btn_end = 'btn_end';
-    const btn_cam = 'btn_cam';
     return (
       <div className="footer">
         <div className="ui-container-h ui-container-gap abs-left">
@@ -223,7 +213,7 @@ class Footer extends React.Component {
             onClick={() => this.props.onClick('btn_cam')}
           />
         </div>
-        <Playback />
+        <Playback value={this.props.progressvalue}/>
       </div>
     );
   }
@@ -237,6 +227,8 @@ class Playback extends React.Component {
         className="playback"
         min="0"
         max="100"
+        value={this.props.value}
+        readOnly={true}
       />
     );
   }
@@ -307,7 +299,9 @@ class App extends React.Component {
     let currentMotion = 'none';
     this.state = {
       sideCamVisible: false,
-      playStatus: 'none',
+      isIdle: false,
+      videoDuration: 0,
+      videoProgress: 0,
       prevMotion: prevMotion,
       currentMotion: currentMotion,
       dice: 0,
@@ -318,19 +312,24 @@ class App extends React.Component {
       prOut1: this.calcPrOut(data_pr, 1, prevMotion, currentMotion),
       prOut2: this.calcPrOut(data_pr, 2, prevMotion, currentMotion)
     };
+    //this.videoRefFront = React.createRef();
     this.handleClick = this.handleClick.bind(this);
     this.handleSlider = this.handleSlider.bind(this);
+    this.handleVideoEnd = this.handleVideoEnd.bind(this);
   }
 
   handleClick(id) {
-    ///*// DEBUG BTN
     console.log(`button pressed: ${id}`);
-    //*/// DEBUG BTN
     switch(id) {
       case 'btn_start':
-        this.findMotion();
+        if(!this.state.isIdle) {
+          this.startVideo();
+        }
         break;
       case 'btn_end':
+      if(this.state.isIdle) {
+        this.stopVideo();
+      }
         break;
       case 'btn_cam':
         const toggleCam = !this.state.sideCamVisible;
@@ -344,8 +343,9 @@ class App extends React.Component {
     }
   }
 
-  handleSlider(id, value) {
+  handleSlider(idIn, value) {
     let data = this.state.prIn;
+    let id = idIn.replace('slider_', '');
     // for category ratio
     if(!id.match(/^\d/)) {
       const set = id.match(/^\D*(?=_)/)[0];
@@ -365,24 +365,59 @@ class App extends React.Component {
     else {
       const cat = parseInt(id.match(/^\d*(?=-)/)[0]);
       let data_cat = data.motionGroup.prRatios.find(o => o.cat === cat).prRatios;
+      const key = data_cat.indexOf(data_cat.find(o => o.code === id));
       let _value = parseFloat(value)/100;
-      for(let i = 0; i < data_cat.length - 1; i++) {
+      for(let i = 0; i <= key; i++) {
         if(i > 0) {
           _value -= data_cat[i-1].pr;
         }
       }
-      for(let index = 0; index < data_cat.length;index++) {
-        if(data_cat[index].code === id) {
-          const _value_diff = _value - data_cat[index].pr;
-          data_cat[index].pr = _value;
-          data_cat[index+1].pr -= _value_diff;
-          data.motionGroup.prRatios.find(o => o.cat === cat).prRatios = data_cat;
-          break;
-        }
-      }
+      const _value_diff = _value - parseFloat(data_cat[key].pr);
+      data_cat[key].pr = _value;
+      data_cat[key+1].pr -= _value_diff;
+      data.motionGroup.prRatios.find(o => o.cat === cat).prRatios = data_cat;
     }
     this.setState({prIn: data});
     this.setPrOut();
+  }
+
+  showSideCam() {
+    return (this.state.sideCamVisible) ? "visible" : "hidden";
+  }
+
+  startVideo() {
+    const id = this.findMotion();
+    const video_front = document.querySelector(`#front_${id}`);
+    const video_side = document.querySelector(`#side_${id}`);
+    video_front.play();
+    video_side.play();
+    console.log("from startVideo in App:");
+    console.log(`  start playing video: ${id}`);
+    console.log(`  video duration: ${video_front.duration}`);
+    this.setState({isIdle: true})
+    this.setState({videoDuration: video_front.duration})
+  }
+
+  stopVideo() {
+    this.setState({isIdle: false});
+  }
+
+  handleVideoTime(id) {
+    const video_front = document.querySelector(`#front_${id}`);
+    const video_progress =
+      video_front.currentTime / this.state.videoDuration * 100;
+    this.setState({videoProgress: video_progress});
+  }
+
+  handleVideoEnd(cam) {
+    if(cam === 'front') {
+      this.setState({videoDuration: 0});
+      console.log("from handleVideoEnd in App:");
+      console.log("  video ended");
+      if(this.state.isIdle) {
+        this.startVideo();
+      }
+    }
   }
 
   findMotion() {
@@ -395,10 +430,11 @@ class App extends React.Component {
       ((current === fix) ? 2 : 1) : 1;
     let prOut = (prOutType === 2) ? this.state.prOut2 : this.state.prOut1;
     let temp = this.findCurrent(dice, prOut);
+    const trial = this.state.trial + 1;
 
     ///*// DEBUG DICE
+    console.log("from findMotion in App:");
     console.log("======== iteration start ========");
-    const trial = this.state.trial + 1;
     let debugbar = "";
     for (let i = 0; i < 20 - trial.toString().length; i++) {
       debugbar += "-";
@@ -407,14 +443,17 @@ class App extends React.Component {
     console.log(`  dice thrown: ${dice.toFixed(3)}`);
     console.log(`  prev motion: ${current}`);
     console.log(`  new motion: ${temp}`);
-    while(temp === current && temp != fix) {
+    //*/// DEBUG DICE
+    while(temp === current && temp !== fix) {
       dice = Math.random();
       temp = this.findCurrent(dice, prOut);
-      // DEBUG DICE REPEAT
+      ///*// DEBUG DICE REPEAT
       console.log('  (repeat trial)');
       console.log(`  dice thrown: ${dice.toFixed(3)}`);
       console.log(`  new motion: ${temp}`);
+      //*/// DEBUG DICE REPEAT
     }
+    ///*// DEBUG DICE
     console.log("(dice trial ends) ---------------");
     //*/// DEBUG DICE
 
@@ -499,7 +538,7 @@ class App extends React.Component {
       this.state.prevMotion,
       this.state.currentMotion
     );
-    const prOut = (this.state.prOutType == 2) ? _pr2 : _pr1;
+    const prOut = (this.state.prOutType === 2) ? _pr2 : _pr1;
     this.setState({
       prOut: prOut,
       prOut1: _pr1,
@@ -507,20 +546,57 @@ class App extends React.Component {
     });
   }
 
-  showSideCam() {
-    return (this.state.sideCamVisible) ? "visible" : "hidden";
+  renderContents(cam) {
+    let codes = [];
+    //const _videoref = (cam === 'side') ? this.videoRefSide : this.videoRefFront;
+    const prOut = this.state.prOut;
+    const current = this.state.currentMotion;
+    prOut.forEach(item => {
+      codes.push(item.code);
+    });
+    let contents = [];
+    codes.forEach(item => {
+      const _isTarget = (item === current) ? true : false;
+      const _content = <Video
+        key={item}
+        //videoref={(_isTarget) ? _videoref : null}
+        id={`${cam}_${item}`}
+        src={require(`./video/${cam}_${item}.mp4`)}
+        visibility={_isTarget}
+        onTimeUpdate={() => this.handleVideoTime(item)}
+        onEnded={() => this.handleVideoEnd(cam)}
+      />;
+      contents.push(_content);
+    });
+    /*// DEBUG RENDER CONTENTS
+    console.log("from renderContents in App:");
+    console.log("  updated video contents");
+    console.log(`  current motion: ${this.state.currentMotion}`);
+    */// DEBUG RENDER CONTENTS
+    return contents;
   }
+
   render() {
     return (
       <div className="App">
         <Placeholder
         id="box_cam_front"
-          content={<Img src={require('./img/front_default.jpg')}/>}
+          content={
+            <div>
+              <Img src={require('./img/front_default.jpg')}/>
+              {this.renderContents('front')}
+            </div>
+          }
           visibility={true}
         />
         <Placeholder
         id="box_cam_side"
-          content={<Img src={require('./img/side_default.jpg')}/>}
+          content={
+            <div>
+              <Img src={require('./img/side_default.jpg')}/>
+              {this.renderContents('side')}
+            </div>
+          }
           visibility={this.state.sideCamVisible}
         />
         <Dashboard
@@ -534,35 +610,10 @@ class App extends React.Component {
           />
         <Footer
           onClick={id => this.handleClick(id)}
+          progressvalue={this.state.videoProgress}
         />
       </div>
     );
   }
 }
 export default App;
-
-
-
-/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
-/*   Functions                                                                 */
-/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
-
-function setNextMotion() {
-  console.log("set next motion and play");
-}
-
-function stopMotion() {
-  console.log("stop motion");
-}
-
-function videoEndHandler() {
-
-}
-
-function blabla() {
-  console.log('bla bla');
-}
-
-function clamp(value, min, max) {
-  return (Math.min(Math.max(value, min), max));
-}

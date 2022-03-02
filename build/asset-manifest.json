@@ -1,0 +1,19 @@
+{
+  "files": {
+    "main.css": "/ambidex-idle-sequencer/static/css/main.992b2422.css",
+    "main.js": "/ambidex-idle-sequencer/static/js/main.20dccbff.js",
+    "static/js/787.a5d67cde.chunk.js": "/ambidex-idle-sequencer/static/js/787.a5d67cde.chunk.js",
+    "static/media/NanumGothicCoding.ttf": "/ambidex-idle-sequencer/static/media/NanumGothicCoding.6297642adf222a0c515e.ttf",
+    "static/media/NanumSquare_acB.ttf": "/ambidex-idle-sequencer/static/media/NanumSquare_acB.ac4e2f27234150ae0de3.ttf",
+    "static/media/side_default.jpg": "/ambidex-idle-sequencer/static/media/side_default.fb6b19f0230a6a7c6d59.jpg",
+    "static/media/front_default.jpg": "/ambidex-idle-sequencer/static/media/front_default.7cea175fd893b6ceb624.jpg",
+    "index.html": "/ambidex-idle-sequencer/index.html",
+    "main.992b2422.css.map": "/ambidex-idle-sequencer/static/css/main.992b2422.css.map",
+    "main.20dccbff.js.map": "/ambidex-idle-sequencer/static/js/main.20dccbff.js.map",
+    "787.a5d67cde.chunk.js.map": "/ambidex-idle-sequencer/static/js/787.a5d67cde.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.992b2422.css",
+    "static/js/main.20dccbff.js"
+  ]
+}

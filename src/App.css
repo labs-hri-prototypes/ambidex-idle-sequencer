@@ -105,10 +105,21 @@ div.placeholder {
   visibility: hidden;
   top: 0;
 }
-div.placeholder img, .placeholder video {
+div.placeholder img {
   position: relative;
   display: block;
   width: 100%;
+}
+div.placeholder video {
+  position: absolute;
+  display: block;
+  width: 100%;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+  color: var(--c-white);
+  background-color: black;
 }
 
 table {

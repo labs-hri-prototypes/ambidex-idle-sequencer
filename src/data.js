@@ -49,7 +49,7 @@ var data_pr = {
         desc: 'presence',
         prRatios: [
           {
-            code: "1-a",
+            code: '1-a',
             pr: 1.000
           }
         ]
@@ -59,11 +59,11 @@ var data_pr = {
         desc: 'presence',
         prRatios: [
           {
-            code: "1-b",
+            code: '1-b',
             pr: 0.500
           },
           {
-            code: "1-c",
+            code: '1-c',
             pr: 0.500
           },
         ]
@@ -73,11 +73,11 @@ var data_pr = {
         desc: 'job',
         prRatios: [
           {
-            code: "2-3-a",
+            code: '2-3-a',
             pr: 0.500
           },
           {
-            code: "2-3-b",
+            code: '2-3-b',
             pr: 0.500
           }
         ]
@@ -87,12 +87,16 @@ var data_pr = {
         desc: 'social',
         prRatios: [
           {
-            code: "3-1-b",
-            pr: 0.500
+            code: '3-1-a',
+            pr: 0.300
           },
           {
-            code: "3-1-c",
-            pr: 0.500
+            code: '3-1-b',
+            pr: 0.300
+          },
+          {
+            code: '3-1-c',
+            pr: 0.300
           }
         ]
       }
