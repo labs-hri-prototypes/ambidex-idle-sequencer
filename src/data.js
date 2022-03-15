@@ -88,15 +88,15 @@ var data_pr = {
         prRatios: [
           {
             code: '3-1-a',
-            pr: 0.300
+            pr: 0.333
           },
           {
             code: '3-1-b',
-            pr: 0.300
+            pr: 0.333
           },
           {
             code: '3-1-c',
-            pr: 0.300
+            pr: 0.334
           }
         ]
       }
