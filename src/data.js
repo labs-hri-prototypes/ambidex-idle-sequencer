@@ -60,11 +60,11 @@ var data_pr = {
         prRatios: [
           {
             code: '1-b',
-            pr: 0.500
+            pr: 0.400
           },
           {
             code: '1-c',
-            pr: 0.500
+            pr: 0.600
           },
         ]
       },
@@ -73,12 +73,20 @@ var data_pr = {
         desc: 'job',
         prRatios: [
           {
+            code: '2-1',
+            pr: 0.300
+          },
+          {
+            code: '2-2',
+            pr: 0.300
+          },
+          {
             code: '2-3-a',
-            pr: 0.500
+            pr: 0.200
           },
           {
             code: '2-3-b',
-            pr: 0.500
+            pr: 0.200
           }
         ]
       },
@@ -88,15 +96,19 @@ var data_pr = {
         prRatios: [
           {
             code: '3-1-a',
-            pr: 0.333
+            pr: 0.200
           },
           {
             code: '3-1-b',
-            pr: 0.333
+            pr: 0.250
           },
           {
             code: '3-1-c',
-            pr: 0.334
+            pr: 0.250
+          },
+          {
+            code: '3-2',
+            pr: 0.300
           }
         ]
       }
