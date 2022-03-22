@@ -424,7 +424,7 @@ class App extends React.Component {
     let dice = Math.random();
     let current = this.state.currentMotion;
     let prev = this.state.prevMotion;
-    let fix = '1-a';
+    let fix = '0-0-1';
     let prOutType = this.state.prOutType;
     prOutType = (prOutType === 1) ?
       ((current === fix) ? 2 : 1) : 1;
